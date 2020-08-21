@@ -8,34 +8,48 @@
 #                                                                                                                   #
 #                                                                                                                   #
 #################################################### MODULES ########################################################
-import pickle
+import pickle,sys
 from os import path,system,name
 from time import sleep 
-from sys import exit,argv
 import sqlite3
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QPixmap,QFont,QMovie,QPainter
+from PyQt5.QtCore import QSize,Qt,QTimer
+from PyQt5.QtGui import QPixmap,QFont,QMovie,QPainter,QCursor,QGuiApplication
 from PIL import Image
 #####################################################################################################################
 class window(QWidget):
     def __init__(self):
         super().__init__()
-        self.setGeometry(300,100,750,500)
+        self.setGeometry(100,100,550,500)
         self.setWindowTitle("ESTATE App")
         self.UI()
-        self.show()
+        
 
     def UI(self):
-        pass
+        screen = QGuiApplication.screenAt(QCursor().pos())
+        fg = self.frameGeometry()
+        fg.moveCenter(screen.geometry().center())
+        self.move(fg.topLeft())
+        self.show()
 
 
 
 #####################################################################################################################
 def main():
-    App = QApplication(argv)
+    App1= QApplication(sys.argv)
+    image = QLabel()
+    movie = QMovie("images/welcome.gif")
+    image.setMovie(movie)
+    movie.start()
+    # image.setPixmap(QPixmap('images/home_graphic.jpg'))
+    image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
+    image.move(585,350)
+    image.show()
+    sleep(5)
+    image.close()
+    App2 = QApplication(sys.argv)
     Window = window()
-    exit(App.exec_())
+    sys.exit(App2.exec_())
 
 if __name__ == '__main__':
     main()
