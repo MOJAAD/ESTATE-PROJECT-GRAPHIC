@@ -14,7 +14,7 @@ from time import sleep
 import sqlite3
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize,Qt,QTimer
-from PyQt5.QtGui import QPixmap,QFont,QMovie,QPainter,QCursor,QGuiApplication
+from PyQt5.QtGui import QPixmap,QFont,QMovie,QPainter,QCursor,QGuiApplication,QImage,QPalette,QBrush
 from PIL import Image
 ################################################# DEFINE CLASSES #################################################### 
 class estate:
@@ -488,8 +488,13 @@ class commercial(building):
 class window(QWidget):
     def __init__(self):
         super().__init__()
-        self.setGeometry(100,100,550,500)
+        self.setGeometry(100,100,800,500)
         self.setWindowTitle("ESTATE App")
+        self.back = QImage("images/background.png")
+        sImage = self.back.scaled(QSize(800,500))
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(sImage))                        
+        self.setPalette(palette)
         self.UI()
         
 
@@ -513,7 +518,7 @@ def main():
     image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
     image.move(585,350)
     image.show()
-    sleep(5)
+    sleep(3)
     image.close()
     App2 = QApplication(sys.argv)
     Window = window()
