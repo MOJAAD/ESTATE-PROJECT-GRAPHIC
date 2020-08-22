@@ -485,12 +485,11 @@ class commercial(building):
     #     self.des4 = 0 
 
 #####################################################################################################################
-font=QFont('Times',14)
 
 class window(QWidget):
     def __init__(self):
         super().__init__()
-        self.setGeometry(100,100,800,500)
+        self.setGeometry(100,100,800,400)
         self.setWindowTitle("ESTATE App")
         self.back = QImage("images/background.png")
         sImage = self.back.scaled(QSize(1400,720))
@@ -508,15 +507,16 @@ class window(QWidget):
         self.move(fg.topLeft())
 
 
-        self.upmenu=QLabel('WELCOME!\nPLEASE CHOOSE!')
-        self.upmenu.setAlignment(QAbstractItemView.PositionAtCenter())
+        self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
+        self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
+        self.upmenu.setAlignment(Qt.AlignCenter)
         self.mainmenu=QVBoxLayout()
-        self.addbutton=QPushButton('ADD NEW ESTATE',self)
-        self.showbutton=QPushButton('SHOW ALL ESTATES (SORTED!)',self)
-        self.editbutton=QPushButton('EDIT ESTATES AND PROFILE ADMIN',self)
-        self.searchbutton=QPushButton('SEARCH ESTATE',self)
-        self.usbutton=QPushButton('ABOUT US!',self)
-        self.exitbutton=QPushButton('EXIT!',self)
+        self.addbutton=QPushButton('افزودن ملک',self)
+        self.showbutton=QPushButton('نمایش املاک (مرتب شده)',self)
+        self.editbutton=QPushButton('ویرایش املاک و  پروفایل ادمین',self)
+        self.searchbutton=QPushButton('جست و جو',self)
+        self.usbutton=QPushButton('درباره ی ما',self)
+        self.exitbutton=QPushButton('خروج',self)
         self.mainmenu.addWidget(self.upmenu)
         self.mainmenu.addWidget(self.addbutton)
         self.mainmenu.addWidget(self.showbutton)
@@ -525,7 +525,7 @@ class window(QWidget):
         self.mainmenu.addWidget(self.usbutton)
         self.mainmenu.addWidget(self.exitbutton)
         self.mainmenu.setContentsMargins(250,150,250,150)
-        self.setStyleSheet(';font-size: 14pt;font-family:Arial Bold;')
+        self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
         self.setLayout(self.mainmenu)
         
 
@@ -535,17 +535,17 @@ class window(QWidget):
 
 #####################################################################################################################
 def main():
-    # App1= QApplication(sys.argv)
-    # image = QLabel()
-    # movie = QMovie("images/welcome.gif")
-    # image.setMovie(movie)
-    # movie.start()
-    # # image.setPixmap(QPixmap('images/home_graphic.jpg'))
-    # image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
-    # image.move(585,350)
-    # image.show()
-    # sleep(3)
-    # image.close()
+    App1= QApplication(sys.argv)
+    image = QLabel()
+    movie = QMovie("images/welcome.gif")
+    image.setMovie(movie)
+    movie.start()
+    # image.setPixmap(QPixmap('images/home_graphic.jpg'))
+    image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
+    image.move(585,350)
+    image.show()
+    sleep(3)
+    image.close()
     App2 = QApplication(sys.argv)
     Window = window()
     sys.exit(App2.exec_())
