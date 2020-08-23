@@ -492,10 +492,20 @@ class window(QWidget):
         self.setGeometry(100,100,800,400)
         self.setWindowTitle("ESTATE App")
         self.back = QImage("images/background.png")
+        # self.back.setSize
         sImage = self.back.scaled(QSize(1400,720))
         palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(sImage))                        
+        palette.setBrush(QPalette.Background, QBrush(sImage))                        
         self.setPalette(palette)
+        self.main = QVBoxLayout('background-image:images/background.png;background-repeat: no-repeat; background-position: center;')
+
+        # self.background = QPixmap("images/background.png")
+        # palette = QPalette()
+        # sImage = self.background.scaled()
+        # palette.setBrush(QPalette.Background,QBrush(self.background).scale(self.size()))
+        # self.window.setPalette(palette)
+
+        
 
         self.UI()
         
@@ -505,6 +515,7 @@ class window(QWidget):
         fg = self.frameGeometry()
         fg.moveCenter(screen.geometry().center())
         self.move(fg.topLeft())
+        # self.l1.move(( self.windowWidth - self.l1.width() ) / 2, ( self.windowHeight - self.l1.height() ) / 2)
 
 
         self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
@@ -526,7 +537,9 @@ class window(QWidget):
         self.mainmenu.addWidget(self.exitbutton)
         self.mainmenu.setContentsMargins(250,150,250,150)
         self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
-        self.setLayout(self.mainmenu)
+        # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
+        self.main.addLayout(self.mainmenu)
+        self.setLayout(self.main)
         
 
         self.show()
@@ -535,17 +548,17 @@ class window(QWidget):
 
 #####################################################################################################################
 def main():
-    App1= QApplication(sys.argv)
-    image = QLabel()
-    movie = QMovie("images/welcome.gif")
-    image.setMovie(movie)
-    movie.start()
-    # image.setPixmap(QPixmap('images/home_graphic.jpg'))
-    image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
-    image.move(585,350)
-    image.show()
-    sleep(3)
-    image.close()
+    # App1= QApplication(sys.argv)
+    # image = QLabel()
+    # movie = QMovie("images/welcome.gif")
+    # image.setMovie(movie)
+    # movie.start()
+    # # image.setPixmap(QPixmap('images/home_graphic.jpg'))
+    # image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
+    # image.move(585,350)
+    # image.show()
+    # sleep(3)
+    # image.close()
     App2 = QApplication(sys.argv)
     Window = window()
     sys.exit(App2.exec_())
