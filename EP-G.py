@@ -492,20 +492,10 @@ class window(QWidget):
         self.setGeometry(100,100,800,400)
         self.setWindowTitle("ESTATE App")
         self.back = QImage("images/background.png")
-        # self.back.setSize
         sImage = self.back.scaled(QSize(1400,720))
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(sImage))                        
         self.setPalette(palette)
-        self.main = QVBoxLayout('background-image:images/background.png;background-repeat: no-repeat; background-position: center;')
-
-        # self.background = QPixmap("images/background.png")
-        # palette = QPalette()
-        # sImage = self.background.scaled()
-        # palette.setBrush(QPalette.Background,QBrush(self.background).scale(self.size()))
-        # self.window.setPalette(palette)
-
-        
 
         self.UI()
         
@@ -515,35 +505,38 @@ class window(QWidget):
         fg = self.frameGeometry()
         fg.moveCenter(screen.geometry().center())
         self.move(fg.topLeft())
-        # self.l1.move(( self.windowWidth - self.l1.width() ) / 2, ( self.windowHeight - self.l1.height() ) / 2)
+        
 
-
-        self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
-        self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
-        self.upmenu.setAlignment(Qt.AlignCenter)
-        self.mainmenu=QVBoxLayout()
-        self.addbutton=QPushButton('افزودن ملک',self)
-        self.showbutton=QPushButton('نمایش املاک (مرتب شده)',self)
-        self.editbutton=QPushButton('ویرایش املاک و  پروفایل ادمین',self)
-        self.searchbutton=QPushButton('جست و جو',self)
-        self.usbutton=QPushButton('درباره ی ما',self)
-        self.exitbutton=QPushButton('خروج',self)
-        self.mainmenu.addWidget(self.upmenu)
-        self.mainmenu.addWidget(self.addbutton)
-        self.mainmenu.addWidget(self.showbutton)
-        self.mainmenu.addWidget(self.editbutton)
-        self.mainmenu.addWidget(self.searchbutton)
-        self.mainmenu.addWidget(self.usbutton)
-        self.mainmenu.addWidget(self.exitbutton)
-        self.mainmenu.setContentsMargins(250,150,250,150)
-        self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
-        # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
-        self.main.addLayout(self.mainmenu)
-        self.setLayout(self.main)
+        # self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
+        # self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
+        # self.upmenu.setAlignment(Qt.AlignCenter)
+        # self.mainmenu=QVBoxLayout()
+        # self.addbutton=QPushButton('افزودن ملک',self)
+        # self.addbutton.clicked.connect(self.adding)
+        # self.showbutton=QPushButton('نمایش املاک (مرتب شده)',self)
+        # self.editbutton=QPushButton('ویرایش املاک و  پروفایل ادمین',self)
+        # self.searchbutton=QPushButton('جست و جو',self)
+        # self.usbutton=QPushButton('درباره ی ما',self)
+        # self.exitbutton=QPushButton('خروج',self)
+        # self.exitbutton.clicked.connect(self.exiting)
+        # self.mainmenu.addWidget(self.upmenu)
+        # self.mainmenu.addWidget(self.addbutton)
+        # self.mainmenu.addWidget(self.showbutton)
+        # self.mainmenu.addWidget(self.editbutton)
+        # self.mainmenu.addWidget(self.searchbutton)
+        # self.mainmenu.addWidget(self.usbutton)
+        # self.mainmenu.addWidget(self.exitbutton)
+        # self.mainmenu.setContentsMargins(250,150,250,150)
+        # self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
+        # # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
+        # self.setLayout(self.mainmenu)
         
 
         self.show()
 
+    def exiting(self):
+        if QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel)==QMessageBox.Yes:
+            sys.exit()
 
 
 #####################################################################################################################
