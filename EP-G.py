@@ -485,7 +485,7 @@ class commercial(building):
     #     self.des4 = 0 
 
 #####################################################################################################################
-con = sqlite3.connect("EP-Gdata.db")
+con = sqlite3.connect("EP_Gdata.db")
 cur = con.cursor()
 
 class window(QWidget):
@@ -530,10 +530,26 @@ class window(QWidget):
         query="SELECT * FROM profile "
         profile = cur.execute(query).fetchone()
         if profile is not None:
-           pass
+            self.clearLayout(self.mainmenu)
+            self.goback=QPushButton('برگشت',self)
+            self.goback.clicked.connect(self.call)
+            self.signinbut = QPushButton('ورود',self)
+            # self.signupbut.clicked.connect(self.signinfunc)
+            self.username_label = QLabel('نام کاربری:')
+            self.username_text = QLineEdit()
+            self.username_text.setPlaceholderText("نام کاربری خود را وارد کنید")
+            self.password_label1 = QLabel('رمز عبور:')
+            self.password_text1 = QLineEdit()
+            self.password_text1.setPlaceholderText("رمز عبور خود را وارد کنید")
+            self.mainmenu.addRow(self.username_text,self.username_label)
+            self.mainmenu.addRow(self.password_text1,self.password_label1)
+            self.mainmenu.addRow(self.goback,self.signinbut)
+            self.mainmenu.setContentsMargins(200,50,200,50)
+            self.setLayout(self.toplayout)
         else:
             self.typer = '0'
             self.clearLayout(self.mainmenu)
+            self.setStyleSheet('font-size:14pt;font-family:Arial;')
             if self.typer =='0':
                 self.wonder = QLabel('شما حساب کاربری ندارید.\nبرای ورود لطفاً ثبت نام کنید.\n')
             else:
@@ -547,7 +563,7 @@ class window(QWidget):
             self.lastname_label = QLabel('نام خانوادگی:')
             self.lastname_text = QLineEdit()
             if self.typer =='0':
-                self.lastname_text.setPlaceholderText("نام خانوارگی خود را وارد کنید")
+                self.lastname_text.setPlaceholderText("نام خانوادگی خود را وارد کنید")
             else:
                 self.lastname_text.setText(self.lastname_text)
             self.username_label = QLabel('نام کاربری:')
@@ -569,38 +585,53 @@ class window(QWidget):
             else:
                 self.password_text2.setText(self.password_text2)
 
-            
-            self.toplayout.addWidget(self.wonder)
+            self.mainmenu.addWidget(self.wonder)
             self.wonder.setAlignment(Qt.AlignCenter)
             self.goback=QPushButton('برگشت',self)
             self.goback.clicked.connect(self.call)
             self.signupbut = QPushButton('ثبت نام',self)
-            # self.signupbut.clicked.connect(self.signpufunc)
+            self.signupbut.clicked.connect(self.signupfunc)
             self.mainmenu.addRow(self.firstname_text,self.firstname_label)
             self.mainmenu.addRow(self.lastname_text,self.lastname_label)
             self.mainmenu.addRow(self.username_text,self.username_label)
             self.mainmenu.addRow(self.password_text1,self.password_label1)
             self.mainmenu.addRow(self.password_text2,self.password_label2)
             self.mainmenu.addRow(self.goback,self.signupbut)
-            self.mainmenu.setContentsMargins(220,50,220,50)
-            self.setLayout(self.mainmenu)
-            # if self.password_text1==self.password_text2:
-            #     pass
-            # else :
-            #     self.clearLayout(self.mainmenu)
-            #     self.typer = '1' 
+            self.mainmenu.setContentsMargins(200,50,200,50)
+            self.setLayout(self.toplayout)
+
+    def signupfunc(self):
+        firstname = self.firstname_text.text()
+        lastname=self.lastname_text.text()
+        username=self.username_text.text()
+        password=self.password_text1.text()
+        if self.password_text1.text()==self.password_text2.text() and (firstname and lastname and username and password !=""):
+            try:
+                query="INSERT INTO EP_Gdata (firstname,lastname,phone,email,address,image) VALUES (?,?,?,?,?,?)"
+                cur.execute(query,(firstname,lastname,username,password)) 
+                con.commit()
+                QMessageBox.information(self,'Success','ثبت نام با موفقیت اتجام شد!')
+                self.close()
+                self.main=window()
+            except:
+                QMessageBox.information(self,"warning","A fault is happen\nPlease try again")
+        elif (firstname or lastname or username or password == ""):
+            QMessageBox.information(self,"Warning!","فیلدها نباید خالی باشند!")
+        else :
+            self.clearLayout(self.mainmenu)
+            self.typer = '1'
+            self.comin 
 
     def aboutus(self):
         self.clearLayout(self.mainmenu)
-        # self.about = QVBoxLayout()
-        self.us = QLabel('برنامه ی مدیریت املاک\nکمپانی: MOJAAD\n تابستان 99')
+        self.us = QLabel('برنامه ی مدیریت املاک\nکمپانی: MOJAAD\n تابستان 99\n')
         self.us.setAlignment(Qt.AlignCenter)
         self.goback = QPushButton('برگشت به صفحه ی اصلی',self)
         self.mainmenu.addWidget(self.us)
         self.mainmenu.addWidget(self.goback)
         self.mainmenu.setContentsMargins(250,150,250,150)
         self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
-        self.setLayout(self.mainmenu)
+        self.setLayout(self.toplayout)
         self.goback.clicked.connect(self.call)
         
     def call(self): 
@@ -611,6 +642,23 @@ class window(QWidget):
         result = QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel)
         if result == QMessageBox.Yes:
             sys.exit()
+
+    # def clearLayout(self,layout):
+    #      if layout is not None:
+    #         while layout.count():
+    #             item = layout.takeAt(0)
+    #             widget = item.widget()
+    #             if widget is not None:
+    #                 widget.setParent(None)
+    #             else:
+    #                 self.clearLayout(item.layout())
+
+    # def clearLayout(self, box):
+    #     for i in range(self.toplayout.count()):
+    #         layout_item = self.toplayout.itemAt(i)
+    #         if layout_item.layout() == box:
+    #             self.toplayout.removeItem(layout_item)
+                
 
     def clearLayout(self,layout):
         while layout.count():
