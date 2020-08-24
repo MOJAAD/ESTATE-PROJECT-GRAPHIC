@@ -485,7 +485,6 @@ class commercial(building):
     #     self.des4 = 0 
 
 #####################################################################################################################
-
 class window(QWidget):
     def __init__(self):
         super().__init__()
@@ -498,6 +497,7 @@ class window(QWidget):
         self.setPalette(palette)
 
         self.UI()
+        self.show()
         
 
     def UI(self):
@@ -505,38 +505,59 @@ class window(QWidget):
         fg = self.frameGeometry()
         fg.moveCenter(screen.geometry().center())
         self.move(fg.topLeft())
-        
 
-        # self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
-        # self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
-        # self.upmenu.setAlignment(Qt.AlignCenter)
-        # self.mainmenu=QVBoxLayout()
+        self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
+        self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
+        self.upmenu.setAlignment(Qt.AlignCenter)
+        self.mainmenu=QVBoxLayout()
         # self.addbutton=QPushButton('افزودن ملک',self)
         # self.addbutton.clicked.connect(self.adding)
         # self.showbutton=QPushButton('نمایش املاک (مرتب شده)',self)
         # self.editbutton=QPushButton('ویرایش املاک و  پروفایل ادمین',self)
         # self.searchbutton=QPushButton('جست و جو',self)
-        # self.usbutton=QPushButton('درباره ی ما',self)
-        # self.exitbutton=QPushButton('خروج',self)
-        # self.exitbutton.clicked.connect(self.exiting)
+        self.comeinbutton=QPushButton('ورود',self)
+        # self.comeinbutton.clicked.connect(self.comin)
+        self.usbutton=QPushButton('درباره ی ما',self)
+        self.usbutton.clicked.connect(self.aboutus)
+        self.exitbutton=QPushButton('خروج',self)
+        self.exitbutton.clicked.connect(self.exiting)
         # self.mainmenu.addWidget(self.upmenu)
         # self.mainmenu.addWidget(self.addbutton)
         # self.mainmenu.addWidget(self.showbutton)
         # self.mainmenu.addWidget(self.editbutton)
-        # self.mainmenu.addWidget(self.searchbutton)
-        # self.mainmenu.addWidget(self.usbutton)
-        # self.mainmenu.addWidget(self.exitbutton)
-        # self.mainmenu.setContentsMargins(250,150,250,150)
-        # self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
-        # # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
-        # self.setLayout(self.mainmenu)
+        self.mainmenu.addWidget(self.comeinbutton)
+        self.mainmenu.addWidget(self.usbutton)
+        self.mainmenu.addWidget(self.exitbutton)
+        self.mainmenu.setContentsMargins(250,150,250,150)
+        self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
+        # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
+        self.setLayout(self.mainmenu)
         
-
-        self.show()
+    def aboutus(self):
+        self.clearLayout(self.mainmenu)
+        self.about = QVBoxLayout()
+        self.us = QLabel('برنامه ی مدیریت املاک\nکمپانی: MOJAAD\n تابستان 99')
+        self.us.setAlignment(Qt.AlignCenter)
+        self.goback = QPushButton('برگشت به صفحه ی اصلی',self)
+        self.about.addWidget(self.us)
+        self.about.addWidget(self.goback)
+        self.about.setContentsMargins(250,150,250,150)
+        self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
+        self.setLayout(self.about)
+        call = self.goback.clicked
+        if call==True: 
+            self.clearLayout(self.about)
+            self.UI()
 
     def exiting(self):
         if QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel)==QMessageBox.Yes:
             sys.exit()
+
+    def clearLayout(self,layout):
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
 
 
 #####################################################################################################################
