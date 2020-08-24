@@ -502,9 +502,9 @@ class window(QWidget):
         fg = self.frameGeometry()
         fg.moveCenter(screen.geometry().center())
         self.move(fg.topLeft())
+        self.toplayout = QVBoxLayout()
         self.mainmenu=QFormLayout()
-        # self.signup = QFormLayout()
-        # self.mainmenu.addLayout(self.signup)
+        self.toplayout.addLayout(self.mainmenu)
         self.UI()
         self.show()
         
@@ -524,7 +524,7 @@ class window(QWidget):
         self.mainmenu.setContentsMargins(250,150,250,150)
         self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
         # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
-        self.setLayout(self.mainmenu)
+        self.setLayout(self.toplayout)
         
     def comin(self):
         query="SELECT * FROM profile "
@@ -569,19 +569,20 @@ class window(QWidget):
             else:
                 self.password_text2.setText(self.password_text2)
 
-            self.mainmenu.addWidget(self.wonder)
+            
+            self.toplayout.addWidget(self.wonder)
             self.wonder.setAlignment(Qt.AlignCenter)
-            self.mainmenu.addRow(self.firstname_label,self.firstname_text)
-            self.mainmenu.addRow(self.lastname_label,self.lastname_text)
-            self.mainmenu.addRow(self.username_label,self.username_text)
-            self.mainmenu.addRow(self.password_label1,self.password_text1)
-            self.mainmenu.addRow(self.password_label2,self.password_text2)
             self.goback=QPushButton('برگشت',self)
             self.goback.clicked.connect(self.call)
             self.signupbut = QPushButton('ثبت نام',self)
             # self.signupbut.clicked.connect(self.signpufunc)
-            self.mainmenu.addRow(self.signupbut,self.goback)
-            self.mainmenu.setContentsMargins(200,50,200,50)
+            self.mainmenu.addRow(self.firstname_text,self.firstname_label)
+            self.mainmenu.addRow(self.lastname_text,self.lastname_label)
+            self.mainmenu.addRow(self.username_text,self.username_label)
+            self.mainmenu.addRow(self.password_text1,self.password_label1)
+            self.mainmenu.addRow(self.password_text2,self.password_label2)
+            self.mainmenu.addRow(self.goback,self.signupbut)
+            self.mainmenu.setContentsMargins(220,50,220,50)
             self.setLayout(self.mainmenu)
             # if self.password_text1==self.password_text2:
             #     pass
