@@ -531,10 +531,6 @@ class window(QWidget):
         profile = cur.execute(query).fetchone()
         if profile is not None:
             self.clearLayout(self.mainmenu)
-            self.goback=QPushButton('برگشت',self)
-            self.goback.clicked.connect(self.call)
-            self.signinbut = QPushButton('ورود',self)
-            self.signinbut.clicked.connect(self.signinfunc)
             self.username_label = QLabel('نام کاربری:')
             self.username_text = QLineEdit()
             self.username_text.setPlaceholderText("نام کاربری خود را وارد کنید")
@@ -542,6 +538,10 @@ class window(QWidget):
             self.password_text1 = QLineEdit()
             self.password_text1.setEchoMode(QLineEdit.Password)
             self.password_text1.setPlaceholderText("رمز عبور خود را وارد کنید")
+            self.goback=QPushButton('برگشت',self)
+            self.goback.clicked.connect(self.call)
+            self.signinbut = QPushButton('ورود',self)
+            self.signinbut.clicked.connect(self.signinfunc)
             self.mainmenu.addRow(self.username_text,self.username_label)
             self.mainmenu.addRow(self.password_text1,self.password_label1)
             self.mainmenu.addRow(self.goback,self.signinbut)
@@ -604,7 +604,14 @@ class window(QWidget):
             self.setLayout(self.toplayout)
 
     def signinfunc(self):
-        self.call()
+        query="SELECT * FROM profile "
+        profile = cur.execute(query).fetchone()
+        if self.username_text.text()==profile[2] and self.password_text1.text()==profile[3] :
+            self.Inprogram = inprogram()
+            self.close()
+        else :
+            QMessageBox.information(self,"Warning!","نام کاربری یا رمز عبور نادرست است\nلطفاً دوباره تلاش کنید")
+            self.comin()
 
     def signupfunc(self):
         firstname = self.firstname_text.text()
@@ -646,45 +653,41 @@ class window(QWidget):
     def exiting(self):
         result = QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel)
         if result == QMessageBox.Yes:
-            sys.exit()
-
-    # def clearLayout(self,layout):
-    #      if layout is not None:
-    #         while layout.count():
-    #             item = layout.takeAt(0)
-    #             widget = item.widget()
-    #             if widget is not None:
-    #                 widget.setParent(None)
-    #             else:
-    #                 self.clearLayout(item.layout())
-
-    # def clearLayout(self, box):
-    #     for i in range(self.toplayout.count()):
-    #         layout_item = self.toplayout.itemAt(i)
-    #         if layout_item.layout() == box:
-    #             self.toplayout.removeItem(layout_item)
-                
+            sys.exit()                
 
     def clearLayout(self,layout):
         while layout.count():
             child = layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
+#####################################################################################################################
+class inprogram(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setGeometry(100,100,1000,600)
+        self.setWindowTitle("ESTATE App")
+        screen = QGuiApplication.screenAt(QCursor().pos())
+        fg = self.frameGeometry()
+        fg.moveCenter(screen.geometry().center())
+        self.move(fg.topLeft())
+        self.show()
 
-
+    def closeEvent(self,event):
+        self.main=window()
+        
 #####################################################################################################################
 def main():
-    # App1= QApplication(sys.argv)
-    # image = QLabel()
-    # movie = QMovie("images/welcome.gif")
-    # image.setMovie(movie)
-    # movie.start()
-    # # image.setPixmap(QPixmap('images/home_graphic.jpg'))
-    # image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
-    # image.move(585,350)
-    # image.show()
-    # sleep(3)
-    # image.close()
+    App1= QApplication(sys.argv)
+    image = QLabel()
+    movie = QMovie("images/welcome.gif")
+    image.setMovie(movie)
+    movie.start()
+    # image.setPixmap(QPixmap('images/home_graphic.jpg'))
+    image.setWindowFlags(Qt.SplashScreen | Qt.FramelessWindowHint)
+    image.move(585,350)
+    image.show()
+    sleep(3)
+    image.close()
     App2 = QApplication(sys.argv)
     Window = window()
     sys.exit(App2.exec_())
