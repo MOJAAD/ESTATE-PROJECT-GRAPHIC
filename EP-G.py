@@ -534,12 +534,13 @@ class window(QWidget):
             self.goback=QPushButton('برگشت',self)
             self.goback.clicked.connect(self.call)
             self.signinbut = QPushButton('ورود',self)
-            # self.signupbut.clicked.connect(self.signinfunc)
+            self.signinbut.clicked.connect(self.signinfunc)
             self.username_label = QLabel('نام کاربری:')
             self.username_text = QLineEdit()
             self.username_text.setPlaceholderText("نام کاربری خود را وارد کنید")
             self.password_label1 = QLabel('رمز عبور:')
             self.password_text1 = QLineEdit()
+            self.password_text1.setEchoMode(QLineEdit.Password)
             self.password_text1.setPlaceholderText("رمز عبور خود را وارد کنید")
             self.mainmenu.addRow(self.username_text,self.username_label)
             self.mainmenu.addRow(self.password_text1,self.password_label1)
@@ -574,12 +575,14 @@ class window(QWidget):
                 self.username_text.setText(self.username_text)
             self.password_label1 = QLabel('رمز عبور:')
             self.password_text1 = QLineEdit()
+            self.password_text1.setEchoMode(QLineEdit.Password)
             if self.typer =='0':
                 self.password_text1.setPlaceholderText("رمز عبور خود را وارد کنید")
             else:
                 self.password_text1.setText(self.password_text1)
             self.password_label2 = QLabel('تکرار رمز عبور:')
             self.password_text2 = QLineEdit()
+            self.password_text2.setEchoMode(QLineEdit.Password)
             if self.typer =='0':
                 self.password_text2.setPlaceholderText("رمز عبور خود را وارد کنید")
             else:
@@ -600,6 +603,9 @@ class window(QWidget):
             self.mainmenu.setContentsMargins(200,50,200,50)
             self.setLayout(self.toplayout)
 
+    def signinfunc(self):
+        self.call()
+
     def signupfunc(self):
         firstname = self.firstname_text.text()
         lastname=self.lastname_text.text()
@@ -607,20 +613,19 @@ class window(QWidget):
         password=self.password_text1.text()
         if self.password_text1.text()==self.password_text2.text() and (firstname and lastname and username and password !=""):
             try:
-                query="INSERT INTO EP_Gdata (firstname,lastname,phone,email,address,image) VALUES (?,?,?,?,?,?)"
+                query="INSERT INTO profile (firstname,lastname,username,password) VALUES (?,?,?,?)"
                 cur.execute(query,(firstname,lastname,username,password)) 
                 con.commit()
                 QMessageBox.information(self,'Success','ثبت نام با موفقیت اتجام شد!')
-                self.close()
-                self.main=window()
+                self.call()
             except:
-                QMessageBox.information(self,"warning","A fault is happen\nPlease try again")
+                QMessageBox.information(self,"warning","خطایی رخ داده است\nلطفاً دوباره تلاش کنید")
         elif (firstname or lastname or username or password == ""):
             QMessageBox.information(self,"Warning!","فیلدها نباید خالی باشند!")
         else :
             self.clearLayout(self.mainmenu)
             self.typer = '1'
-            self.comin 
+            self.comin()
 
     def aboutus(self):
         self.clearLayout(self.mainmenu)
