@@ -10,8 +10,8 @@
 #################################################### MODULES ########################################################
 import pickle,sys
 from os import path,system,name
-# from time import sleep 
-# import sqlite3
+from time import sleep 
+import sqlite3
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize,Qt,QTimer
 from PyQt5.QtGui import QPixmap,QFont,QMovie,QCursor,QGuiApplication,QImage,QPalette,QBrush
@@ -485,6 +485,9 @@ class commercial(building):
     #     self.des4 = 0 
 
 #####################################################################################################################
+con = sqlite3.connect("EP-Gdata.db")
+cur = con.cursor()
+
 class window(QWidget):
     def __init__(self):
         super().__init__()
@@ -499,7 +502,9 @@ class window(QWidget):
         fg = self.frameGeometry()
         fg.moveCenter(screen.geometry().center())
         self.move(fg.topLeft())
-        self.mainmenu=QVBoxLayout()
+        self.mainmenu=QFormLayout()
+        # self.signup = QFormLayout()
+        # self.mainmenu.addLayout(self.signup)
         self.UI()
         self.show()
         
@@ -507,21 +512,12 @@ class window(QWidget):
         self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
         self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
         self.upmenu.setAlignment(Qt.AlignCenter)
-        # self.addbutton=QPushButton('افزودن ملک',self)
-        # self.addbutton.clicked.connect(self.adding)
-        # self.showbutton=QPushButton('نمایش املاک (مرتب شده)',self)
-        # self.editbutton=QPushButton('ویرایش املاک و  پروفایل ادمین',self)
-        # self.searchbutton=QPushButton('جست و جو',self)
         self.comeinbutton=QPushButton('ورود',self)
-        # self.comeinbutton.clicked.connect(self.comin)
+        self.comeinbutton.clicked.connect(self.comin)
         self.usbutton=QPushButton('درباره ی ما',self)
         self.usbutton.clicked.connect(self.aboutus)
         self.exitbutton=QPushButton('خروج',self)
         self.exitbutton.clicked.connect(self.exiting)
-        # self.mainmenu.addWidget(self.upmenu)
-        # self.mainmenu.addWidget(self.addbutton)
-        # self.mainmenu.addWidget(self.showbutton)
-        # self.mainmenu.addWidget(self.editbutton)
         self.mainmenu.addWidget(self.comeinbutton)
         self.mainmenu.addWidget(self.usbutton)
         self.mainmenu.addWidget(self.exitbutton)
@@ -530,6 +526,69 @@ class window(QWidget):
         # self.setStyleSheet('background-repeat: no-repeat; background-position: center;')
         self.setLayout(self.mainmenu)
         
+    def comin(self):
+        query="SELECT * FROM profile "
+        profile = cur.execute(query).fetchone()
+        if profile is not None:
+           pass
+        else:
+            self.typer = '0'
+            self.clearLayout(self.mainmenu)
+            if self.typer =='0':
+                self.wonder = QLabel('شما حساب کاربری ندارید.\nبرای ورود لطفاً ثبت نام کنید.\n')
+            else:
+                self.wonder=QLabel('رمز عبور مطابقت ندارد!')
+            self.firstname_label = QLabel('نام:')
+            self.firstname_text = QLineEdit()
+            if self.typer =='0':
+                self.firstname_text.setPlaceholderText("نام خود را وارد کنید")
+            else :
+                self.firstname_text.setText(self.firstname_text)
+            self.lastname_label = QLabel('نام خانوادگی:')
+            self.lastname_text = QLineEdit()
+            if self.typer =='0':
+                self.lastname_text.setPlaceholderText("نام خانوارگی خود را وارد کنید")
+            else:
+                self.lastname_text.setText(self.lastname_text)
+            self.username_label = QLabel('نام کاربری:')
+            self.username_text = QLineEdit()
+            if self.typer =='0':
+                self.username_text.setPlaceholderText("نام کاربری خود را وارد کنید")
+            else:
+                self.username_text.setText(self.username_text)
+            self.password_label1 = QLabel('رمز عبور:')
+            self.password_text1 = QLineEdit()
+            if self.typer =='0':
+                self.password_text1.setPlaceholderText("رمز عبور خود را وارد کنید")
+            else:
+                self.password_text1.setText(self.password_text1)
+            self.password_label2 = QLabel('تکرار رمز عبور:')
+            self.password_text2 = QLineEdit()
+            if self.typer =='0':
+                self.password_text2.setPlaceholderText("رمز عبور خود را وارد کنید")
+            else:
+                self.password_text2.setText(self.password_text2)
+
+            self.mainmenu.addWidget(self.wonder)
+            self.wonder.setAlignment(Qt.AlignCenter)
+            self.mainmenu.addRow(self.firstname_label,self.firstname_text)
+            self.mainmenu.addRow(self.lastname_label,self.lastname_text)
+            self.mainmenu.addRow(self.username_label,self.username_text)
+            self.mainmenu.addRow(self.password_label1,self.password_text1)
+            self.mainmenu.addRow(self.password_label2,self.password_text2)
+            self.goback=QPushButton('برگشت',self)
+            self.goback.clicked.connect(self.call)
+            self.signupbut = QPushButton('ثبت نام',self)
+            # self.signupbut.clicked.connect(self.signpufunc)
+            self.mainmenu.addRow(self.signupbut,self.goback)
+            self.mainmenu.setContentsMargins(200,50,200,50)
+            self.setLayout(self.mainmenu)
+            # if self.password_text1==self.password_text2:
+            #     pass
+            # else :
+            #     self.clearLayout(self.mainmenu)
+            #     self.typer = '1' 
+
     def aboutus(self):
         self.clearLayout(self.mainmenu)
         # self.about = QVBoxLayout()
@@ -548,8 +607,7 @@ class window(QWidget):
         self.UI()
 
     def exiting(self):
-        result = QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel,'font-size:12pt;')
-        # QMessageBox.setStyleSheet('font-size:12pt;font-family:Times')
+        result = QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel)
         if result == QMessageBox.Yes:
             sys.exit()
 
