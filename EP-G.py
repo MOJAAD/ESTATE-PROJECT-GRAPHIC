@@ -10,12 +10,12 @@
 #################################################### MODULES ########################################################
 import pickle,sys
 from os import path,system,name
-from time import sleep 
-import sqlite3
+# from time import sleep 
+# import sqlite3
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize,Qt,QTimer
-from PyQt5.QtGui import QPixmap,QFont,QMovie,QPainter,QCursor,QGuiApplication,QImage,QPalette,QBrush
-from PIL import Image
+from PyQt5.QtGui import QPixmap,QFont,QMovie,QCursor,QGuiApplication,QImage,QPalette,QBrush
+# from PIL import Image
 ################################################# DEFINE CLASSES #################################################### 
 class estate:
     area=0
@@ -495,21 +495,18 @@ class window(QWidget):
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(sImage))                        
         self.setPalette(palette)
-
-        self.UI()
-        self.show()
-        
-
-    def UI(self):
         screen = QGuiApplication.screenAt(QCursor().pos())
         fg = self.frameGeometry()
         fg.moveCenter(screen.geometry().center())
         self.move(fg.topLeft())
-
+        self.mainmenu=QVBoxLayout()
+        self.UI()
+        self.show()
+        
+    def UI(self):
         self.upmenu=QLabel('خوش آمدید\nلطفاً انتخاب کنید:\n')
         self.upmenu.setStyleSheet('font-size:20pt;font-family:Times Bold;')
         self.upmenu.setAlignment(Qt.AlignCenter)
-        self.mainmenu=QVBoxLayout()
         # self.addbutton=QPushButton('افزودن ملک',self)
         # self.addbutton.clicked.connect(self.adding)
         # self.showbutton=QPushButton('نمایش املاک (مرتب شده)',self)
@@ -535,22 +532,25 @@ class window(QWidget):
         
     def aboutus(self):
         self.clearLayout(self.mainmenu)
-        self.about = QVBoxLayout()
+        # self.about = QVBoxLayout()
         self.us = QLabel('برنامه ی مدیریت املاک\nکمپانی: MOJAAD\n تابستان 99')
         self.us.setAlignment(Qt.AlignCenter)
         self.goback = QPushButton('برگشت به صفحه ی اصلی',self)
-        self.about.addWidget(self.us)
-        self.about.addWidget(self.goback)
-        self.about.setContentsMargins(250,150,250,150)
+        self.mainmenu.addWidget(self.us)
+        self.mainmenu.addWidget(self.goback)
+        self.mainmenu.setContentsMargins(250,150,250,150)
         self.setStyleSheet('font-size: 14pt;font-family:Arial Bold;')
-        self.setLayout(self.about)
-        call = self.goback.clicked
-        if call==True: 
-            self.clearLayout(self.about)
-            self.UI()
+        self.setLayout(self.mainmenu)
+        self.goback.clicked.connect(self.call)
+        
+    def call(self): 
+        self.clearLayout(self.mainmenu)
+        self.UI()
 
     def exiting(self):
-        if QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel)==QMessageBox.Yes:
+        result = QMessageBox.question(self,'Warning','از خروج مطمئن هستید؟',QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel , QMessageBox.Cancel,'font-size:12pt;')
+        # QMessageBox.setStyleSheet('font-size:12pt;font-family:Times')
+        if result == QMessageBox.Yes:
             sys.exit()
 
     def clearLayout(self,layout):
